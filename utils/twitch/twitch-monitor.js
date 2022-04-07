@@ -1,12 +1,12 @@
-const { getUser, getStream, getGame } = require('./twitch-api.js');
+const { getStream, getUser, getGame } = require('./twitch-api.js');
 
 const { twitch } = require('../../config/config.js');
 
 module.exports = async (member) => {
     console.log('[Twitch] Monitorando a stream!');
-    const user = await getUser(twitch.STREAMER, member);
-    const stream = await getStream(twitch.STREAMER, member);
-    const game = await getGame(stream.game_id, member);
+    const stream = await getStream(twitch.STREAMER);
+    const user = await getUser(twitch.STREAMER)
+    const game = await getGame(twitch.STREAMER)
 
-    console.log(user, stream, game);
+    console.log(stream, user, game);
 };

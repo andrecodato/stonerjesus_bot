@@ -16,7 +16,8 @@
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
     "mongoose": "^6.2.10",
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "node-twitch": "^0.4.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

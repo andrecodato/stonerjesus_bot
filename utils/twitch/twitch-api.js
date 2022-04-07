@@ -1,34 +1,36 @@
-const { twitch } = require ('../../config/config.js');
-const fetch = require('node-fetch');
+const cfg = require ('../../config/config.js');
+const TwitchAPI = require('node-twitch').default;
 
-const get = async (url) => {
+const twitch = new TwitchAPI({
+    client_id: cfg.twitch.CLIENT_ID,
+    client_secret: cfg.twitch.CLIENT_SECRET
+});
+
+const getStream = async (streamer) => {
     try {
-        const req = await fetch(url, {
-            headers: { 
-                'Client-ID': twitch.CLIENT_ID,
-                'Authorization': 'Bearer ' + twitch.TOKEN
-            }
-        });
-
-        const res = await req.json()
-        console.log(res);
-
-        return res.data.length ? res.data[0] : null;
+        const stream = await twitch.getStreams({channels: [streamer]})
+        return stream.data[0];
     } catch (err) {
         return console.error(err);
     }
 };
 
-const getUser = async (user) => {
-    return await get(`https://api.twitch.tv/helix/users?login=${user}`)
+const getUser = async (streamer) => {
+    try {
+        const user = await getStream(streamer).then(user => user.user_name);
+        return user;
+    } catch (err) {
+        return console.error(err);
+    }
 };
 
-const getStream = async (user) => {
-	return await get(`https://api.twitch.tv/helix/streams?user_login=${user}`);
+const getGame = async (streamer) => {
+    try {
+        const game = await getStream(streamer).then(game => game.game_name)
+        return game;
+    } catch (err) {
+        return console.error(err);
+    }
 };
 
-const getGame = async (id) => {
-	return await get(`https://api.twitch.tv/helix/games?id=${id}`);
-};
-
-module.exports = {get, getUser, getStream, getGame};
+module.exports = { getStream, getUser, getGame};
