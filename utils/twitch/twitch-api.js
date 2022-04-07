@@ -1,7 +1,7 @@
 const cfg = require ('../../config/config.js');
-const TwitchAPI = require('node-twitch').default;
+const nTwitch = require('node-twitch').default;
 
-const twitch = new TwitchAPI({
+const twitch = new nTwitch({
     client_id: cfg.twitch.CLIENT_ID,
     client_secret: cfg.twitch.CLIENT_SECRET
 });
