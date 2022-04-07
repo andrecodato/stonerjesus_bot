@@ -21,11 +21,13 @@ module.exports = {
                         body: commands
                     });
                     console.log("Commandos globais registrados com sucesso!")
+                    require('../utils/twitch/twitch-monitor.js')(client);
                 } else {
                     await rest.put(Routes.applicationGuildCommands(CLIENT_ID, process.env.GUILD_ID), {
                         body: commands
                     });
-                    console.log("Commandos locais registrados com sucesso!")
+                    console.log("Commandos locais registrados com sucesso!");
+                    require('../utils/twitch/twitch-monitor.js')(client);
                 }
             } catch (err) {
                 if (err) console.error(err);

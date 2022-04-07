@@ -8,3 +8,6 @@
 # Dependency directories
 node_modules/
 wiki/
+
+# Config files
+config/config.js
