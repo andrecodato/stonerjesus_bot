@@ -6,7 +6,7 @@ const Discord = require("discord.js");
 
 module.exports = async (client) => {
     console.log('[Twitch] Monitorando a stream!');
-    new CronJob('* * * * * *', async () => {
+    new CronJob('*/1 * * * *', async () => {
         const guildSettings = await GuildSettings.findOne({ guild_id: client.user.id });
         if (!guildSettings && !guildSettings.notification_channel_id) return;
 
@@ -21,10 +21,12 @@ module.exports = async (client) => {
         if (!stream) return;
 
         if(stream.type == 'live'){
+            console.log('[Twitch] Notificando live');
             const newNotifierEmbed = new Discord.MessageEmbed()
                 .setColor('#A233FF')
                 .setTitle('🔵 LIVE ON')
                 .setURL(`https://twitch.tv/${user.user_name}`)
+                .setThumbnail(client.user.displayAvatarURL())
                 .setFields(
                     {name:'Título:', value : `${stream.title}`},
                     {name:'Jogando:', value: `${game}`, inline: true},
@@ -32,10 +34,13 @@ module.exports = async (client) => {
                 )
                 .setImage(stream.getThumbnailUrl())
                 .setTimestamp()
+                .setFooter({text:'Stoner Jesus', iconURL:`${client.user.displayAvatarURL()}`})
             
-            client.channels.cache.get(guildSettings.notification_channel_id).send({
+            const message = await channel.send({
                 embeds: [newNotifierEmbed]
             })
+
+            await message.react("<:twitch:956700382938165279>");
         };
 
 
