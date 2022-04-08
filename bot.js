@@ -6,7 +6,7 @@ const Database = require("./config/Database");
 const db = new Database();
 db.connect();
 
-const { Client, Intents, Collection } = require("discord.js");
+const { Client, Intents, Collection, DiscordAPIError } = require("discord.js");
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
@@ -26,6 +26,8 @@ for (const file of commandFiles) {
     commands.push(command.data.toJSON());
     client.commands.set(command.data.name, command);
 }
+
+client.streams = new Collection();
 
 const eventFiles = fs
     .readdirSync("./events")

@@ -15,8 +15,29 @@ module.exports = async (client) => {
         const stream = await getStream(twitch.STREAMER);
         const user = await getUser(twitch.STREAMER)
         const game = await getGame(twitch.STREAMER)
+        
+        // console.log(channel, stream, user, game);
 
-        console.log(channel, stream, user, game);
+        if (!stream) return;
+
+        if(stream.type == 'live'){
+            const newNotifierEmbed = new Discord.MessageEmbed()
+                .setColor('#A233FF')
+                .setTitle('🔵 LIVE ON')
+                .setURL(`https://twitch.tv/${user.user_name}`)
+                .setFields(
+                    {name:'Título:', value : `${stream.title}`},
+                    {name:'Jogando:', value: `${game}`, inline: true},
+                    {name:'Viewers:', value: `${stream.viewer_count}`, inline: true}
+                )
+                .setImage(stream.getThumbnailUrl())
+                .setTimestamp()
+            
+            client.channels.cache.get(guildSettings.notification_channel_id).send({
+                embeds: [newNotifierEmbed]
+            })
+        };
+
 
     }).start();
 };

@@ -9,7 +9,7 @@ const twitch = new nTwitch({
 const getStream = async (streamer) => {
     try {
         const stream = await twitch.getStreams({channels: [streamer]})
-        return stream.data[0];
+        return stream.data.length ? stream.data[0] : false;
     } catch (err) {
         return console.error(err);
     }
