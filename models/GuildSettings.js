@@ -5,6 +5,8 @@ const GuildSettingsSchema = new mongoose.Schema({
     welcome_channel_id: String,
     sugestion_channel_id: String,
     notification_channel_id: String,
+    user_id: String,
+    stream_id: String,
     message_id: String
 });
 
