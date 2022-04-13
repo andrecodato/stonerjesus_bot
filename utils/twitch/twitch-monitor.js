@@ -20,7 +20,6 @@ module.exports = async (client) => {
             });
             const channel = client.channels.cache.get(streamData.notification_channel_id);
 
-
             console.log('[Twitch] Notificando live');
             const newNotifierEmbed = new Discord.MessageEmbed()
             .setColor('#A233FF')
@@ -52,7 +51,7 @@ module.exports = async (client) => {
                     stream_id: stream.id,
                     message_id: message.id
                 })
-            } else {
+            } else if (streamData.stream_id == stream.id) {
                 client.streams.set(channel.guild.id, user.id);
     
                 let message = streamData.message_id
@@ -60,11 +59,25 @@ module.exports = async (client) => {
                         .fetch(streamData.message_id)
                         .then((msg) => msg.edit({embeds: [newNotifierEmbed]}))
                         .catch(() => channel.send({embeds: [newNotifierEmbed]}))
-                    : await channel.send({embeds: [newNotifierEmbed]})
+                    : await channel.send({embeds: [newNotifierEmbed]});
                 
                 await message.react('<:twitch:956700382938165279>');
     
-                await streamData.update({
+                await streamData.updateOne({
+                    user_id: user.id,
+                    stream_id: stream.id,
+                    message_id: message.id
+                })
+            } else {
+                client.streams.set(channel.guild.id, user.id);
+
+                const message = await channel.send({
+                    embeds: [newNotifierEmbed]
+                });
+
+                await message.react('<:twitch:956700382938165279>');
+
+                await streamData.updateOne({
                     user_id: user.id,
                     stream_id: stream.id,
                     message_id: message.id
