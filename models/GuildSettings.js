@@ -7,7 +7,8 @@ const GuildSettingsSchema = new mongoose.Schema({
     notification_channel_id: String,
     user_id: String,
     stream_id: String,
-    message_id: String
+    message_id: String,
+    video_id: String
 });
 
 module.exports = mongoose.model('GuildSettings', GuildSettingsSchema);

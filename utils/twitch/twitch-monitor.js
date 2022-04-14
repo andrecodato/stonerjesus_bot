@@ -20,23 +20,24 @@ module.exports = async (client) => {
             });
             const channel = client.channels.cache.get(streamData.notification_channel_id);
 
-            console.log('[Twitch] Notificando live');
             const newNotifierEmbed = new Discord.MessageEmbed()
             .setColor('#A233FF')
-                .setTitle('🔵 LIVE ON')
-                .setURL(`https://twitch.tv/${user.user_name}`)
-                .setThumbnail(client.user.displayAvatarURL())
-                .setFields(
-                    {name:'Título:', value : `${stream.title}`},
-                    {name:'Jogando:', value: `${game}`, inline: true},
-                    {name:'Viewers:', value: `${stream.viewer_count}`, inline: true}
-                    )
-                    .setImage(stream.getThumbnailUrl())
-                    .setTimestamp()
-                    .setFooter({text:'Stoner Jesus', iconURL:`${client.user.displayAvatarURL()}`})
-                    
-                    
+            .setTitle('🔵 LIVE ON')
+            .setURL(`https://twitch.tv/${user}`)
+            .setThumbnail(client.user.displayAvatarURL())
+            .setFields(
+                {name:'Título:', value : `${stream.title}`},
+                {name:'Jogando:', value: `${game}`, inline: true},
+                {name:'Viewers:', value: `${stream.viewer_count}`, inline: true},
+                {name:'Canal:', value: `[${user}](https://twitch.tv/${user})`, inline: true}
+                )
+            .setImage(stream.getThumbnailUrl())
+            .setTimestamp()
+            .setFooter({text:'Stoner Jesus', iconURL:`${client.user.displayAvatarURL()}`})
+                
+                
             if (!streamData) {
+                console.log('[Twitch] Notificando live');
                 client.streams.set(channel.guild.id, user.id);
                         
 
@@ -44,7 +45,7 @@ module.exports = async (client) => {
                     embeds: [newNotifierEmbed]
                 });
 
-                await message.react('<:twitch:956700382938165279>');
+                await message.react(twitch.REACT_EMOJI);
 
                 return await GuildSettings.create({
                     user_id: user.id,
@@ -52,16 +53,15 @@ module.exports = async (client) => {
                     message_id: message.id
                 })
             } else if (streamData.stream_id == stream.id) {
+                console.log('[Twitch] Editando notificação anterior');
                 client.streams.set(channel.guild.id, user.id);
     
-                let message = streamData.message_id
-                    ? await channel.messages
-                        .fetch(streamData.message_id)
-                        .then((msg) => msg.edit({embeds: [newNotifierEmbed]}))
-                        .catch(() => channel.send({embeds: [newNotifierEmbed]}))
-                    : await channel.send({embeds: [newNotifierEmbed]});
+                let message = await channel.messages
+                    .fetch(streamData.message_id)
+                    .then((msg) => msg.edit({embeds: [newNotifierEmbed]}))
+                    .catch(() => channel.send({embeds: [newNotifierEmbed]}))
                 
-                await message.react('<:twitch:956700382938165279>');
+                await message.react(twitch.REACT_EMOJI);
     
                 await streamData.updateOne({
                     user_id: user.id,
@@ -69,13 +69,14 @@ module.exports = async (client) => {
                     message_id: message.id
                 })
             } else {
+                console.log('[Twitch] Notificando live');
                 client.streams.set(channel.guild.id, user.id);
 
                 const message = await channel.send({
                     embeds: [newNotifierEmbed]
                 });
 
-                await message.react('<:twitch:956700382938165279>');
+                await message.react(twitch.REACT_EMOJI);
 
                 await streamData.updateOne({
                     user_id: user.id,
