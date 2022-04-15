@@ -6,7 +6,7 @@ const Discord = require('discord.js');
 module.exports = async (client) => {
     console.log('[YouTube] Monitorando canal do youtube por vídeos');
     
-    Youtube.start(5, './utils/youtube/videoData.json');
+    Youtube.start(60, './utils/youtube/videoData.json');
     
     Youtube.events.on("newVid",async (obj) => {
         console.log('[YouTube] Notificando novo vídeo');
@@ -29,10 +29,9 @@ module.exports = async (client) => {
             .setThumbnail(`${client.user.displayAvatarURL()}`)
             .setFields(
                 {name:'Título:', value : `${name}`},
-                {name:'Canal:', value: `${channelName}`, url: `${channelUrl}`, inline: true}
+                {name:'Canal:', value: `[${channelName}](${channelUrl})`, inline: true}
                 )
             .setImage(thumbnail)
-            .setTimestamp()
             .setFooter({text:'Stoner Jesus', iconURL:`${client.user.displayAvatarURL()}`})
             
         const message = await channel.send({
