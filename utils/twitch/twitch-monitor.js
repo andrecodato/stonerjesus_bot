@@ -38,8 +38,6 @@ module.exports = async (client) => {
                 
             if (!streamData) {
                 console.log('[Twitch] Notificando live');
-                client.streams.set(channel.guild.id, user.id);
-                        
 
                 const message = await channel.send({
                     embeds: [newNotifierEmbed]
@@ -54,7 +52,6 @@ module.exports = async (client) => {
                 })
             } else if (streamData.stream_id == stream.id) {
                 console.log('[Twitch] Editando notificação anterior');
-                client.streams.set(channel.guild.id, user.id);
     
                 let message = await channel.messages
                     .fetch(streamData.message_id)
@@ -70,9 +67,9 @@ module.exports = async (client) => {
                 })
             } else {
                 console.log('[Twitch] Notificando live');
-                client.streams.set(channel.guild.id, user.id);
 
                 const message = await channel.send({
+                    content: '<@&964617545036496946>',
                     embeds: [newNotifierEmbed]
                 });
 

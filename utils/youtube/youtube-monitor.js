@@ -35,6 +35,7 @@ module.exports = async (client) => {
             .setFooter({text:'Stoner Jesus', iconURL:`${client.user.displayAvatarURL()}`})
             
         const message = await channel.send({
+            content: '<@&964617503110221885>',
             embeds: [newNotifierEmbed]
         })
         
